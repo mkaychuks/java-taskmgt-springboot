@@ -1,5 +1,6 @@
 package ng.mkaychuks.authify.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ng.mkaychuks.authify.io.ProfileRequest;
 import ng.mkaychuks.authify.io.ProfileResponse;
@@ -17,7 +18,7 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping("/register")
-    public ProfileResponse register(@RequestBody ProfileRequest request){
+    public ProfileResponse register(@Valid @RequestBody ProfileRequest request){
         ProfileResponse response = profileService.createProfile(request);
         return response;
     }
