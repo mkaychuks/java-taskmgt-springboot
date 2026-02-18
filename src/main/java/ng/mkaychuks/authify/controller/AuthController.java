@@ -1,10 +1,13 @@
 package ng.mkaychuks.authify.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ng.mkaychuks.authify.io.AuthRequest;
+import ng.mkaychuks.authify.io.AuthResponse;
 import ng.mkaychuks.authify.service.AppUserDetailsService;
+import ng.mkaychuks.authify.util.JwtUtil;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,13 +27,21 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final AppUserDetailsService appUserDetailsService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request){
+    public ResponseEntity<?> login(@RequestBody AuthRequest request){
         try {
             authenticate(request.getEmail(), request.getPassword());
             final UserDetails userDetails =  appUserDetailsService.loadUserByUsername(request.getEmail());
-            return ResponseEntity.ok("Login successful");
+            final String jwtToken = jwtUtil.generateToken(userDetails);
+            ResponseCookie cookie = ResponseCookie.from("jwt", jwtToken)
+                    .httpOnly(true)
+                    .path("/")
+                    .maxAge(Duration.ofDays(1))
+                    .sameSite("Strict")
+                    .build();
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(new AuthResponse(request.getEmail(), jwtToken));
         } catch (BadCredentialsException e) {
             Map<String, Object> error = new HashMap<>();
             error.put("error", true);

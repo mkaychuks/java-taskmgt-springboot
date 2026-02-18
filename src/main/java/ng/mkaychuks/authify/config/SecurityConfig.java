@@ -3,12 +3,12 @@ package ng.mkaychuks.authify.config;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import ng.mkaychuks.authify.service.AppUserDetailsService;
-import org.apache.catalina.filters.CorsFilter;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -64,9 +64,9 @@ public class SecurityConfig {
     public CorsFilter corsFilter(){
         return new CorsFilter(corsConfigurationSource());
     }
-    
+
     @Bean
-    public AuthenticationManager authenticationManager(){
+    public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(appUserDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(daoAuthenticationProvider);
