@@ -1,10 +1,10 @@
-package ng.mkaychuks.authify;
+package ng.mkaychuks.task;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthifyApplicationTests {
+class TaskApplicationTests {
 
     @Test
     void contextLoads() {
