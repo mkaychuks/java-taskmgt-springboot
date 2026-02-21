@@ -1,11 +1,11 @@
-package ng.mkaychuks.task.domain.mappers.impl;
+package ng.mkaychuks.task.mappers.impl;
 
 import ng.mkaychuks.task.domain.dto.TaskListDto;
 import ng.mkaychuks.task.domain.entities.Task;
 import ng.mkaychuks.task.domain.entities.TaskList;
 import ng.mkaychuks.task.domain.entities.TaskStatus;
-import ng.mkaychuks.task.domain.mappers.TaskListMapper;
-import ng.mkaychuks.task.domain.mappers.TaskMapper;
+import ng.mkaychuks.task.mappers.TaskListMapper;
+import ng.mkaychuks.task.mappers.TaskMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

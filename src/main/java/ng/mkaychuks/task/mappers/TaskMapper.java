@@ -1,4 +1,4 @@
-package ng.mkaychuks.task.domain.mappers;
+package ng.mkaychuks.task.mappers;
 
 import ng.mkaychuks.task.domain.dto.TaskDto;
 import ng.mkaychuks.task.domain.entities.Task;

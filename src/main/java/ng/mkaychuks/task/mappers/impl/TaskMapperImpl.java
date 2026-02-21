@@ -1,8 +1,8 @@
-package ng.mkaychuks.task.domain.mappers.impl;
+package ng.mkaychuks.task.mappers.impl;
 
 import ng.mkaychuks.task.domain.dto.TaskDto;
 import ng.mkaychuks.task.domain.entities.Task;
-import ng.mkaychuks.task.domain.mappers.TaskMapper;
+import ng.mkaychuks.task.mappers.TaskMapper;
 import org.springframework.stereotype.Component;
 
 @Component
