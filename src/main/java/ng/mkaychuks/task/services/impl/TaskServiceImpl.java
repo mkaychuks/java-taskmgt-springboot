@@ -1,24 +1,59 @@
 package ng.mkaychuks.task.services.impl;
 
 import ng.mkaychuks.task.domain.entities.Task;
+import ng.mkaychuks.task.domain.entities.TaskList;
+import ng.mkaychuks.task.domain.entities.TaskPriority;
+import ng.mkaychuks.task.domain.entities.TaskStatus;
+import ng.mkaychuks.task.repositories.TaskListRepository;
 import ng.mkaychuks.task.repositories.TaskRepository;
 import ng.mkaychuks.task.services.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskListRepository taskListRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, TaskListRepository taskListRepository) {
         this.taskRepository = taskRepository;
+        this.taskListRepository = taskListRepository;
     }
 
     @Override
     public List<Task> listTasks(UUID taskListId) {
         return taskRepository.findByTaskListId(taskListId);
+    }
+
+    @Override
+    public Task createTask(UUID taskListId, Task task) {
+        if (null != task.getId()) {
+            throw new IllegalArgumentException("Task already has an ID");
+        }
+
+        if (null == task.getTitle() || task.getTitle().isBlank()) {
+            throw new IllegalArgumentException("Task must have a title");
+        }
+
+        TaskPriority taskPriority = Optional.ofNullable(task.getPriority()).orElse(TaskPriority.MEDIUM);
+        TaskStatus taskStatus = Optional.ofNullable(task.getStatus()).orElse(TaskStatus.OPEN);
+        TaskList taskList = taskListRepository.findById(taskListId).orElseThrow(() -> new IllegalArgumentException("Invalid Task List ID provided"));
+        Task taskToSave = new Task(
+                null,
+                task.getTitle(),
+                task.getDescription(),
+                task.getDueDate(),
+                taskStatus,
+                taskPriority,
+                taskList,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        return taskRepository.save(taskToSave);
     }
 }
