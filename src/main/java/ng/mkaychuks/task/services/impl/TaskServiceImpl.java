@@ -1,5 +1,6 @@
 package ng.mkaychuks.task.services.impl;
 
+import jakarta.transaction.Transactional;
 import ng.mkaychuks.task.domain.entities.Task;
 import ng.mkaychuks.task.domain.entities.TaskList;
 import ng.mkaychuks.task.domain.entities.TaskPriority;
@@ -84,5 +85,11 @@ public class TaskServiceImpl implements TaskService {
         existingTask.setUpdated(LocalDateTime.now());
 
         return taskRepository.save(existingTask);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.deleteByTaskListIdAndId(taskListId, taskId);
     }
 }
