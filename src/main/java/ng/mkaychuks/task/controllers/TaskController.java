@@ -7,6 +7,7 @@ import ng.mkaychuks.task.services.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,5 +36,10 @@ public class TaskController {
                 taskMapper.fromDto(taskDto)
         );
         return taskMapper.toDto(createdTask);
+    }
+
+    @GetMapping(path = "/{task_id}")
+    public Optional<TaskDto> getTask(@PathVariable("task_list_id") UUID taskListId, @PathVariable("task_id") UUID taskID) {
+        return taskService.getTask(taskListId, taskID).map(taskMapper::toDto);
     }
 }
